@@ -1,0 +1,17 @@
+import { z } from 'zod'
+import * as s from './schemas'
+export type TRegisterUser = z.infer<typeof s.schenaRegisterUser>
+export type TLogin = z.infer<typeof s.schenaLogin>
+export type TGetEventoByDescription = z.infer<typeof s.schemaGetEventoByDescription>
+export type TEndereco = z.infer<typeof s.schemaEndereco>
+export type TPagination = z.infer<typeof s.schemaPargination>
+export type TLotes = z.infer<typeof s.schemaLotes>
+export type TLotesByID = z.infer<typeof s.schemaLotesByID>
+export type TRegisterLote = z.infer<typeof s.schemaRegisterLote>
+export type TBuyer = z.infer<typeof s.schemaBuyer>
+export type TSaler = z.infer<typeof s.schemaRegisterSaler>
+export type TRegisterLance = z.infer<typeof s.schemaRegisterLance>
+export type TGetLanceEnviado = z.infer<typeof s.schemaGetLanceEnviado>
+export type TGetCotacaoFiltered = z.infer<typeof s.schemaGetCotacaoFiltered>
+export type TValidateLance = z.infer<typeof s.schemavalidateLance>
+export type TUpdateUser = z.infer<typeof s.schemaUpdatUser>
