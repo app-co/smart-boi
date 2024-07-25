@@ -36,19 +36,17 @@ export function enumStatusLote({ type = 'enum', value }: I) {
 }
 export function enumTempoVida({ type = 'enum', value }: I) {
   const enunStatusLote = [
-    { label: 'Até Doze Meses', value: 0 },
-    { label: 'Até Vinte Quatro Meses', value: 1 },
-    { label: 'Até Trinta e Seis Meses', value: 2 },
-    { label: 'Até Quarenta e oito Meses', value: 3 },
-    { label: 'Mais de Quarenta e oito Meses', value: 4 },
+    { label: '0-12 Meses', value: 0 },
+    { label: '12-24 Meses', value: 1 },
+    { label: '24-36 Meses', value: 2 },
+    { label: 'Acima de 36 Meses', value: 3 },
   ]
 
   const fomated: { [key: number]: string } = {
-    0: 'Até Doze Meses',
-    1: 'Até Vinte Quatro Meses',
-    2: 'Até Trinta e Seis Meses',
-    3: 'Até Quarenta e oito Meses',
-    4: 'Mais de Quarenta e oito Meses',
+    0: '0-12 Meses',
+    1: '12-24 Meses',
+    2: '24-36 Meses',
+    3: 'Acima de 36 Meses',
   }
 
   if (type === 'formated') {
@@ -59,27 +57,21 @@ export function enumTempoVida({ type = 'enum', value }: I) {
 }
 export function enumTempoVenda({ type = 'enum', value }: I) {
   const enunStatusLote = [
-    { label: 'Cinco Dias', value: 0 },
-    { label: 'Dez Dias', value: 1 },
-    { label: 'Quinze Dias', value: 2 },
-    { label: 'Vinte Dias', value: 3 },
-    { label: 'Vinte CincoDias', value: 4 },
-    { label: 'Trinta Dias', value: 5 },
-    { label: 'Trinta cinco Dias', value: 6 },
-    { label: 'Quarenta Dias', value: 7 },
-    { label: 'Quarenta e cinco Dias', value: 8 },
+    { label: '3 Dias', value: 0 },
+    { label: '5 Dias', value: 1 },
+    { label: '7 Dias', value: 2 },
+    { label: '10 Dias', value: 3 },
+    { label: '15 Dias', value: 4 },
+    { label: '30 Dias', value: 5 },
   ]
 
   const formatedEnunStatusLote: { [key: number]: string } = {
-    0: 'Cinco Dias',
-    1: 'Dez Dias',
-    2: 'Quinze Dias',
-    3: 'Vinte Dias',
-    4: 'Vinte Cinco Dias',
-    5: 'Trinta Dias',
-    6: 'Trinta cinco Dias',
-    7: 'Quarenta Dias',
-    8: 'Quarenta e cinco Dias',
+    0: '3 Dias',
+    1: '5 Dias',
+    2: '7 Dias',
+    3: '10 Dias',
+    4: '15 Dias',
+    5: '30 Dias',
   }
 
   if (type === 'formated') {
@@ -162,9 +154,9 @@ export function enumSexo({ type = 'enum', value }: I) {
 }
 export function enumCategoriaLote({ type = 'enum', value }: I): string | { value: number, label: string }[] {
   const enunStatusLote = [
-    { label: 'Bezerro', value: 0 },
+    { label: 'Garrote', value: 0 },
     { label: 'Touro', value: 1 },
-    { label: 'Novilho', value: 2 },
+    { label: 'Novilha', value: 2 },
     { label: 'Vaca', value: 3 },
     { label: 'Boi', value: 4 },
     { label: 'Potro', value: 5 },
@@ -183,9 +175,9 @@ export function enumCategoriaLote({ type = 'enum', value }: I): string | { value
   ]
 
   const formatedEnunStatusLote: { [key: number]: string } = {
-    0: 'Bezerro',
+    0: 'Garrote',
     1: 'Touro',
-    2: 'Novilho',
+    2: 'Novilha',
     3: 'Vaca',
     4: 'Boi',
     5: 'Potro',

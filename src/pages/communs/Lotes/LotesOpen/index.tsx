@@ -1,4 +1,5 @@
 import { FilterSvg } from '@/assets/svg/lotes/filter'
+import { Filter } from '@/components/Filter'
 import { Loading } from '@/components/Loading'
 import { Lotes } from '@/components/Lotes'
 import { useAuth } from '@/contexts/auth'
@@ -21,12 +22,16 @@ export default function LotesOpen() {
     statusLote: 5,
   })
 
+
+
+  const [openSweet, setOpenSwet] = React.useState<boolean>(false)
+
   const lote = data && data.length ? data : []
 
   const lotes = React.useMemo(() => {
     return lote.map(h => {
       const sexo = enumSexo({ type: 'formated', value: h.sexo })
-      const vida = enumTempoVida({ type: 'formated', value: h.tempoDeVida })
+      const vida = enumTempoVida({ type: 'formated', value: Number(h.tempoDeVida) })
       const dt = {
         data: format(new Date(h.dataCriacao), 'dd/MM/yy'),
         descricao: `${h.quantidade} ${sexo} ${h.raca}`,
@@ -45,8 +50,6 @@ export default function LotesOpen() {
     })
   }, [lote])
 
-  console.log({})
-
 
   if (isLoading) {
     return <Loading />
@@ -54,13 +57,14 @@ export default function LotesOpen() {
 
   return (
     <S.Container>
+      <Filter onClose={h => setOpenSwet(h)} isOpen={openSweet} setCity={h => console.log(h)} setStatus={h => console.log(h)} setUf={h => console.log(h)} />
       <HStack mb={8} alignItems={'center'} space={3} w={'full'} >
         <S.boxInput>
           <Feather name='search' size={20} />
           <S.input placeholder='Buscar' />
         </S.boxInput>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setOpenSwet(true)} >
           <Circle size={'35px'} bg={color.text_color.global} >
             <FilterSvg />
           </Circle>

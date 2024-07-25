@@ -21,10 +21,10 @@ const colors: { [key: number]: string } = {
 }
 
 export const Container = styled.View`
-  width: ${widtPercent('55')}px;
+  width: ${widtPercent('57')}px;
   border-radius: 10px;
   background-color: #fff;
-  border-width: 1;
+  border-width: 1px;
   border-color: #e5e5e5;
 `;
 

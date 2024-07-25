@@ -1,5 +1,6 @@
 import { color } from '@/styles/color';
 import { _text } from '@/styles/sizes';
+import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
@@ -26,4 +27,12 @@ export const box = styled.View`
 
   align-items: center;
   margin: 5px 0;
+`
+
+export const footerButton = styled(Animated.View) <{ end: boolean }>`
+  width: 100%;
+  align-self: center;
+  bottom: 5%;
+  position: absolute;
+  bottom: 20px;
 `

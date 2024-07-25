@@ -268,7 +268,7 @@ export function Arrematar() {
 
         <S.line />
 
-        {selectedTypeTransportadora === '0' && (
+        {selectedTypeTransportadora === '1' && (
           <S.content>
             <S.title>SELECIONE O ENDEREÇO PARA ENTREGA</S.title>
             <Selection itens={fazendas} itemSelected={h => setSelectedEnderecoId(h)} />

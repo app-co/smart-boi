@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { Control, Controller, FieldError } from 'react-hook-form';
+import { Control, Controller } from 'react-hook-form';
 
 import { Mask } from '@/utils/mask';
 import { Input, TypeInput } from '../Input';
@@ -9,8 +9,8 @@ import { Input, TypeInput } from '../Input';
 type T = TypeInput & {
   name: string;
   control: Control<any>;
-  error?: FieldError;
-  mask?: 'date' | 'cpf' | 'cell-phone' | 'placa' | 'cep' | 'currency'
+  error?: any;
+  mask?: 'date' | 'cpf' | 'cell-phone' | 'placa' | 'cep' | 'currency';
 };
 
 const msk = new Mask()
@@ -31,7 +31,7 @@ export function FormInput({ name, control, mask, error, ...rest }: T) {
           currency: (e: string) => e ? msk.money(e) : '',
         }
 
-        const m = mascars[mask]
+        const m = mascars[mask!]
 
         return (
           <Input

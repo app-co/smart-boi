@@ -53,8 +53,8 @@ export default function OthersInfo({ item }: { item: ILotesById }) {
           </Box>
 
           <VStack>
-            <Button icon={<MoneyFillSvg />} title='ARREMATAR' styleType='dark' />
-            <Button icon={<MarteloSvg />} title='ENVIAR OFERTA' styleType='alert' />
+            <Button onPress={() => navigate.navigate('Arrematar', { lote: item, typeLance: 'arrematar' })} icon={<MoneyFillSvg />} title='ARREMATAR' styleType='dark' />
+            <Button onPress={() => navigate.navigate('Arrematar', { lote: item, typeLance: 'oferta' })} icon={<MarteloSvg />} title='ENVIAR OFERTA' styleType='alert' />
           </VStack>
         </S.content>
 

@@ -62,7 +62,7 @@ left: -5px;
 
 export const title = styled.Text`
   font-family: bold;
-  font-size: ${_text}px;
+  font-size: ${_text - 2}px;
 `;
 
 export const titleFaixa = styled.Text`
@@ -73,7 +73,7 @@ export const titleFaixa = styled.Text`
 
 export const text = styled.Text`  
   font-family: trin;
-  font-size: ${_text - 2}px;
+  font-size: ${_text - 3}px;
 `
 
 export const content = styled.View`

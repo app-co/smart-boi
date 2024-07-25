@@ -1,4 +1,5 @@
 import { FilterSvg } from '@/assets/svg/lotes/filter'
+import { Filter } from '@/components/Filter'
 import { Loading } from '@/components/Loading'
 import { Lotes } from '@/components/Lotes'
 import { useGetLotes } from '@/hooks/queries'
@@ -15,6 +16,8 @@ export default function LotesClosed() {
   const { data, isLoading, refetch } = useGetLotes({
     statusLote: 4,
   })
+
+  const [openSwet, setOpenSwet] = React.useState<boolean>(false)
 
   const lote = data && data.length ? data : []
 
@@ -43,6 +46,8 @@ export default function LotesClosed() {
 
   return (
     <S.Container>
+      <Filter onClose={h => setOpenSwet(h)} isOpen={openSwet} setCity={h => console.log(h)} setStatus={h => console.log(h)} setUf={h => console.log(h)} />
+
       <HStack mb={8} alignItems={'center'} space={3} w={'full'} >
         <S.boxInput>
           <Feather name='search' size={20} />

@@ -1,7 +1,6 @@
-import { UseFatch } from '@/hooks/fetchs'
-import React from 'react'
-import MyLotes from './components/MyLotes'
-import * as S from './styles'
+import { UseFatch } from '@/hooks/fetchs';
+import MyLotes from './components/MyLotes';
+import * as S from './styles';
 
 const fetch = new UseFatch()
 

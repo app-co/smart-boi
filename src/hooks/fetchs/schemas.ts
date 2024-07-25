@@ -67,7 +67,7 @@ export const schemaRegisterLote = z.object({
   TipoCategoriaLote: z.string(),
   EnderecoFazendaId: z.string(),
   ValorPorQuilo: z.string(),
-  Video: z.string(),
+  Video: z.string().optional().nullable(),
   DescricaoLote: z.string(),
   TempoDeVida: z.string(),
   TempoDeVenda: z.string(),

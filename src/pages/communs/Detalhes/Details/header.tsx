@@ -4,7 +4,7 @@ import { UseFatch } from "@/hooks/fetchs";
 import { ILotesById } from "@/hooks/fetchs/interfaces";
 import { _text, hightPercent, widtPercent } from "@/styles/sizes";
 import { Box, Image } from "native-base";
-import React, { memo, useRef } from "react";
+import React, { memo, useRef, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import YoutubeIframe from "react-native-youtube-iframe";
 import * as S from './styles';
@@ -24,7 +24,11 @@ export function Details({ data, setIsready, indexR = 0 }: I) {
   const [off, setOff] = React.useState(0)
   const { isReady } = useVideo()
 
-  const handleScroll = (event: any) => {
+
+  const [showButton, setShowButton] = useState(true);
+
+
+  const handleScrollImage = (event: any) => {
     const offsetX = event.nativeEvent.contentOffset.x;
     setOff(offsetX)
     const newIndex = Math.round(offsetX / hightPercent('100'));
@@ -32,6 +36,13 @@ export function Details({ data, setIsready, indexR = 0 }: I) {
   };
 
   const zindex = indexR === 0 ? 10 : 0
+  const url = data.urlVideo ?? ''
+
+  // Usar regex para extrair o ID
+  const regex = /(?<=\live\/)[^?]+/;
+  const match = url.match(regex);
+  const videoId = match ? match[0] : null;
+
 
   return (
     <Box height={200} >
@@ -40,7 +51,7 @@ export function Details({ data, setIsready, indexR = 0 }: I) {
           <YoutubeIframe
             onReady={() => setIsready(true)}
             play={false}
-            videoId="E9Pqq8UFEm4"
+            videoId={videoId}
             height={200}
           />
         </Box>
@@ -55,7 +66,7 @@ export function Details({ data, setIsready, indexR = 0 }: I) {
           horizontal={true}
           data={data?.urlImagens}
           keyExtractor={(item) => item.id}
-          onScroll={handleScroll}
+          onScroll={handleScrollImage}
           renderItem={({ item: h }) => (
             <Image bg={'gray.300'} h={'200px'} resizeMode="cover" w={hightPercent('50')} alt='imagens' source={{ uri: h.urlImagem }} />
           )}

@@ -36,7 +36,7 @@ export function Carrocel({ variation, item }: I) {
 
           <Box p={2} style={{ gap: 10 }} >
             <HStack alignItems={'center'} justifyContent={'space-between'} >
-              <Box>
+              <Box flex={1} >
                 <S.title>{item?.uf} - {item.cidade}</S.title>
                 <S.title>{format(item.dataCriacao, 'dd/MM/yyyy')}</S.title>
               </Box>

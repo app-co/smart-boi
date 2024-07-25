@@ -75,7 +75,7 @@ export function Acess() {
               <S.title style={{ color: '#fff', width: 100, textAlign: 'center', fontSize: _text - 2 }} >Ver Lotes</S.title>
             </S.bigBottom>
 
-            <S.bigBottom onPress={() => navigate('stakLance')} cor={color.alert} >
+            <S.bigBottom onPress={() => navigate('Lance')} cor={color.alert} >
               <S.title style={{ color: '#fff', textAlign: 'center', fontSize: _text - 2, width: 100 }} >Meus Lances</S.title>
             </S.bigBottom>
           </HStack>

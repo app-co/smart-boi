@@ -17,9 +17,10 @@ import { enumCategoriaLote, enumEspecie, enumSexo } from '@/utils/enuns'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { Box, Center, Circle, HStack } from 'native-base'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Alert, ScrollView, Share, TouchableOpacity } from 'react-native'
 import { Modalize } from 'react-native-modalize'
+import { Extrapolate, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import * as S from './styles'
 
 const itens = Array.from({ length: 9 }, (_, index) => index + 1)
@@ -36,8 +37,43 @@ const sexo: any = {
 
 export default function Details({ item }: I) {
   const { user } = useAuth()
+  const scrollViewRef = useRef(null);
   const navigate = useNavigation()
   const ref = useRef<Modalize>(null)
+
+  const [scrollDirection, setScrollDirection] = useState<'down' | 'up' | ''>('');
+  const [scrollOffset, setScrollOffset] = React.useState(0)
+  const [endScroll, setEndScroll] = React.useState<boolean>(false)
+
+  const animatedValue = useSharedValue(0);
+  const animation = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: interpolate(
+          animatedValue.value,
+          [0, 1],
+          [100, 15],
+          Extrapolate.CLAMP,
+        ),
+      },
+    ],
+  }));
+
+  React.useEffect(() => {
+    if (!endScroll) {
+      animatedValue.value = withTiming(scrollDirection === 'up' ? 1 : 0, {
+        duration: 300,
+      });
+
+    }
+
+    if (endScroll) {
+      animatedValue.value = withTiming(1, {
+        duration: 300,
+      });
+    }
+  }, [animatedValue, scrollDirection, endScroll]);
+
 
   const accessComum = user?.tipoAcesso.find(h => h.codTipoAcesso === 4)?.codTipoAcesso === 4 && user.tipoAcesso.length === 1
 
@@ -92,12 +128,30 @@ export default function Details({ item }: I) {
   };
 
 
+
+  const handleScroll = (event: any) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const direction = currentOffset > 0 && currentOffset > scrollOffset ? 'down' : 'up';
+    setScrollDirection(direction);
+    setScrollOffset(currentOffset);
+
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent
+
+    const isEnd = layoutMeasurement.height + contentOffset.y >= contentSize.height - 1
+    setEndScroll(isEnd)
+  };
+
+
   return (
     <S.Container>
       <ChangeAccountSignIn modalizeRef={ref} />
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 50, paddingTop: 30 }}
+
+        ref={scrollViewRef}
+        contentContainerStyle={{ paddingBottom: 130, paddingTop: 30 }}
         showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
 
         <S.box>
@@ -217,24 +271,28 @@ export default function Details({ item }: I) {
           <S.title>R$ {total.toLocaleString('pt-BR')}</S.title>
         </HStack>
 
-        <Box mt={4}>
 
-          <Button onPress={() => {
-            if (accessComum) {
-              ref.current?.open()
-              return
-            }
-            navigate.navigate('Arrematar', { lote: item, typeLance: 'arrematar' })
-          }} icon={<MoneyFillSvg />} title='ARREMATAR' styleType='dark' />
-          <Button onPress={() => {
-            if (accessComum) {
-              ref.current?.open()
-              return
-            }
-            navigate.navigate('Arrematar', { lote: item, typeLance: 'oferta' })
-          }} icon={<MarteloSvg />} title='ENVIAR OFERTA' styleType='alert' />
-        </Box>
+
       </ScrollView>
+
+      <S.footerButton end={endScroll} style={animation} >
+
+        <Button onPress={() => {
+          if (accessComum) {
+            ref.current?.open()
+            return
+          }
+          navigate.navigate('Arrematar', { lote: item, typeLance: 'arrematar' })
+        }} icon={<MoneyFillSvg />} title='ARREMATAR' styleType='dark' />
+        <Button onPress={() => {
+          if (accessComum) {
+            ref.current?.open()
+            return
+          }
+          navigate.navigate('Arrematar', { lote: item, typeLance: 'oferta' })
+        }} icon={<MarteloSvg />} title='ENVIAR OFERTA' styleType='alert' />
+      </S.footerButton>
+
 
     </S.Container>
   )

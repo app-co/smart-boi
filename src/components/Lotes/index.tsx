@@ -76,7 +76,7 @@ export function Lotes({ item, type = 'ofertar', typeUser = 'comprador', status =
           <Image alt='boi' resizeMode='cover' source={{ uri: item?.img[0]?.urlImagem }} w={'90px'} h={'80px'} rounded={'16px'} />
         </S.boxImage>
 
-        <Box>
+        <Box flex={1} >
           <S.text>{item.data}</S.text>
           <S.title>{item?.descricao}</S.title>
 
@@ -91,8 +91,8 @@ export function Lotes({ item, type = 'ofertar', typeUser = 'comprador', status =
             <S.text>{enumStatusLote({ type: 'formated', value: item.status })}</S.text>
           </S.status>
         ) : (
-          <Box bg={color.focus.regular} rounded={10} px={3} py={'3px'} mr={3} >
-            <S.title style={{ fontSize: _text - 2, color: '#fff' }} >{item?.oferta ?? 0} OFERTAS</S.title>
+          <Box bg={color.focus.regular} rounded={10} px={3} py={'3px'} >
+            <S.title style={{ fontSize: _text - 4, color: '#fff' }} >{item?.oferta ?? 0} OFERTAS</S.title>
           </Box>
 
         )}

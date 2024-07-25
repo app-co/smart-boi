@@ -54,7 +54,6 @@
     "styled-components": "^5.3.11",
     "yup": "^1.4.0",
     "zod": "^3.23.8",
-    "onesignal-expo-plugins": "2.0.2",
     "onesignal-expo-plugin": "2.0.2"
   },
   "devDependencies": {
