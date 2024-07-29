@@ -3,8 +3,9 @@ import { useVideo } from "@/contexts/video";
 import { UseFatch } from "@/hooks/fetchs";
 import { ILotesById } from "@/hooks/fetchs/interfaces";
 import { _text, hightPercent, widtPercent } from "@/styles/sizes";
+import { getTokenUrl } from "@/utils/getTokenUrl";
 import { Box, Image } from "native-base";
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useRef } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import YoutubeIframe from "react-native-youtube-iframe";
 import * as S from './styles';
@@ -25,9 +26,6 @@ export function Details({ data, setIsready, indexR = 0 }: I) {
   const { isReady } = useVideo()
 
 
-  const [showButton, setShowButton] = useState(true);
-
-
   const handleScrollImage = (event: any) => {
     const offsetX = event.nativeEvent.contentOffset.x;
     setOff(offsetX)
@@ -38,10 +36,8 @@ export function Details({ data, setIsready, indexR = 0 }: I) {
   const zindex = indexR === 0 ? 10 : 0
   const url = data.urlVideo ?? ''
 
-  // Usar regex para extrair o ID
-  const regex = /(?<=\live\/)[^?]+/;
-  const match = url.match(regex);
-  const videoId = match ? match[0] : null;
+  const videoId = getTokenUrl(url)
+
 
 
   return (

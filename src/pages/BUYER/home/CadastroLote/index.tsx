@@ -192,60 +192,7 @@ export function CadastroLote() {
     }
   };
 
-  async function submit(input: TRegisterLote) {
-    if (!oferta || !especie || !categoria || !fazenda || !tempoVenda || !tempoVida) {
-      toast.show({
-        title: 'Todos os campos são obrigatórios',
-        placement: 'bottom',
-        duration: 3000,
-        bg: 'red.700'
-      })
-      return;
-    }
-    try {
 
-      const dt = {
-        ...input,
-        Quantidade: Number(Quantidade),
-        PesoMedio: _currencyToNumber(PesoMedio ?? '0'),
-        ValorPorQuilo: _currencyToNumber(ValorPorQuilo ?? '0'),
-        ValorPorAnimal: _currencyToNumber(ValorPorAnimal ?? '0'),
-        Sexo: Number(sexo),
-        Imagens: image,
-        TipoOferta: Number(oferta),
-        TipoEspecie: Number(especie),
-        UsuarioAppId: user!.usuarioId,
-        EventoId: evento,
-        TipoCategoriaLote: Number(categoria),
-        EnderecoFazendaId: fazenda,
-        TempoDeVida: Number(tempoVida),
-        TempoDeVenda: Number(tempoVenda),
-      }
-
-      await registerLote.mutateAsync(dt)
-
-      toast.show({
-        title: 'Lote cadastrado com sucesso',
-        placement: 'top',
-        duration: 3000,
-        bg: 'green.700'
-      })
-
-      navigation.navigate('myLotes')
-
-    } catch (error) {
-      console.log(error)
-      if (error instanceof AppError) {
-        toast.show({
-          title: error.message,
-          placement: 'bottom',
-          duration: 3000,
-          bg: 'red.400'
-        })
-      }
-    }
-
-  }
 
 
   function onChangeOferta(h: string) {
@@ -290,6 +237,61 @@ export function CadastroLote() {
 
     return dt
   }, [Quantidade, ValorPorQuilo, ValorPorAnimal, PesoMedio, oferta, getComissao])
+
+  async function submit(input: TRegisterLote) {
+    if (!oferta || !especie || !categoria || !fazenda || !tempoVenda || !tempoVida) {
+      toast.show({
+        title: 'Todos os campos são obrigatórios',
+        placement: 'bottom',
+        duration: 3000,
+        bg: 'red.700'
+      })
+      return;
+    }
+    try {
+
+      const dt = {
+        ...input,
+        Quantidade: Number(Quantidade),
+        PesoMedio: Number(PesoMedio),
+        ValorPorQuilo: _currencyToNumber(ValorPorQuilo ?? '0'),
+        ValorPorAnimal: _currencyToNumber(calc.valorAnimal),
+        Sexo: Number(sexo),
+        Imagens: image,
+        TipoOferta: Number(oferta),
+        TipoEspecie: Number(especie),
+        UsuarioAppId: user!.usuarioId,
+        EventoId: evento,
+        TipoCategoriaLote: Number(categoria),
+        EnderecoFazendaId: fazenda,
+        TempoDeVida: Number(tempoVida),
+        TempoDeVenda: Number(tempoVenda),
+      }
+      console.log({ dt })
+      await registerLote.mutateAsync(dt)
+
+      toast.show({
+        title: 'Lote cadastrado com sucesso',
+        placement: 'top',
+        duration: 3000,
+        bg: 'green.700'
+      })
+
+      navigation.navigate('myLotes')
+
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AppError) {
+        toast.show({
+          title: error.message,
+          placement: 'bottom',
+          duration: 3000,
+          bg: 'red.400'
+        })
+      }
+    }
+
+  }
 
 
 

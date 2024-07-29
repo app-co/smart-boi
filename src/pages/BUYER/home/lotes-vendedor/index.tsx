@@ -79,25 +79,6 @@ export default function LotesVendedor() {
   }
 
 
-  // const renderTabBar = (props: any) => (
-  //   <TabBar
-  //     {...props}
-  //     activeColor={color.focus.regular}
-  //     contentContainerStyle={{
-  //       backgroundColor: 'red',
-  //       gap: 10,
-  //       borderRadius: 30
-  //     }}
-  //     inactiveColor="#7B7B7B"
-  //     style={{ marginTop: 25, gap: 10, backgroundColor: 'rgba(172, 168, 168, 0)', elevation: 0 }}
-  //     pressColor={color.focus.regular}
-  //     renderIndicator={renderIndicator}
-  //     indicatorContainerStyle={{
-  //       gap: 10
-  //     }}
-  //   />
-  // );
-
   const renderIndicator = (props: any) => (
     <TabBarIndicator
       {...props}

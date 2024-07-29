@@ -17,7 +17,7 @@ import { color } from '@/styles/color'
 import { _subtitle, _title, hightPercent, widtPercent } from '@/styles/sizes'
 import { enumCategoriaLote } from '@/utils/enuns'
 import { Mask } from '@/utils/mask'
-import { convertNumbeToCurrency } from '@/utils/unidades'
+import { _currencyToNumber, convertNumbeToCurrency } from '@/utils/unidades'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Box, Center, Checkbox, HStack, Image, useToast } from 'native-base'
@@ -78,13 +78,12 @@ export function Arrematar() {
     queryFn: async () => fetch.getFazenda(user!.usuarioId)
   })
 
-  const getImposto = useQuery({
+  const { data: getImposto, isLoading: getImpostoLoading } = useQuery({
     queryKey: 'imposto',
     queryFn: async () => fetch.getImposto()
   })
 
   const getUsers = useGetRepresentants()
-  console.log({ rep: getUsers })
   const representantes = getUsers?.data && getUsers.data.length > 0
     ? getUsers.data.map(h => {
       return {
@@ -94,7 +93,7 @@ export function Arrematar() {
     })
     : []
 
-  const getComissao = useQuery({
+  const { data: getComissao, isLoading: getComissaoLoading } = useQuery({
     queryKey: 'comissao',
     queryFn: async () => fetch.getComissao({ comissao: 2 })
   })
@@ -132,21 +131,32 @@ export function Arrematar() {
     changeToArrematar()
   }, [tipoLance])
 
-  const vlAnimal = lote.valorPorAnimal
-  const vlLote = (lote?.quantidadeAnimal ?? 1) * vlAnimal
-  const comissao = (getComissao?.data?.porcentagem / 100 ?? 0) * vlAnimal
-  const imposto = checkImpost ? 0 : (getImposto.data?.valor ?? 0)
+
   const [modal, setModal] = React.useState<boolean>(false)
 
   const toast = useToast()
 
-  const total = vlAnimal + vlLote + vlAnimal + comissao + imposto + frete
+  const calc = React.useMemo(() => {
+    const { valorPorAnimal, quantidadeAnimal, valorPorQuilo } = lote
+    const porcentagem = getComissao?.porcentagem ?? 0
+    const tributo = getImposto?.valor ?? 0
 
-  const vlFinalPorAnimal = lote.valorPorAnimal + comissao + frete + imposto
+    const vlAnimal = valorPorAnimal ?? 0
+    const vlLote = quantidadeAnimal ?? 1 * vlAnimal
+    const comissao = porcentagem ? (porcentagem / 100) * vlAnimal : 0
+    const imposto = checkImpost ? 0 : tributo
+    const total = vlAnimal + vlLote + vlAnimal + comissao + imposto + frete
+
+    const vlFinalPorAnimal = vlAnimal + comissao + frete + imposto
+
+    return {
+      vlAnimal, quantidadeAnimal, vlLote, comissao, imposto, total, vlFinalPorAnimal
+    }
+  }, [lote, getComissao, checkImpost, getImposto])
 
 
   async function subit(input: TSubmit) {
-    if (!selectedEnderecoId && selectedTypeTransportadora === '0') {
+    if (!selectedEnderecoId && selectedTypeTransportadora === '1') {
       toast.show({
         title: 'Selecione um endereço',
         placement: 'top',
@@ -162,14 +172,14 @@ export function Arrematar() {
 
     const dt: TRegisterLance = {
       loteId: lote!.loteId,
-      valorImposto: Number(imposto.toFixed(2)),
+      valorImposto: Number(calc.imposto.toFixed(2)),
       valorFrete: Number(frete),
-      comissaoPaga: Number(comissao.toFixed(2)),
+      comissaoPaga: Number(calc.comissao.toFixed(2)),
       valorLance: typeLance === 'arrematar' ? null : Number(valorQuilo.replace(/\D/g, '')),
-      precoAnimal: vlAnimal,
-      valorFinalAnimal: Number(vlFinalPorAnimal.toFixed(2)),
+      precoAnimal: calc.vlAnimal,
+      valorFinalAnimal: Number(calc.vlFinalPorAnimal.toFixed(2)),
       valorFinalKg: kg,
-      precoLote: vlLote,
+      precoLote: calc.vlLote,
       qtdCabeca: lote.quantidadeAnimal,
       arrematar: typeLance === 'arrematar' ? true : false,
       tipoImposto: checkImpost ? 0 : 1,
@@ -205,7 +215,7 @@ export function Arrematar() {
 
   const tipoLote = enumCategoriaLote({ type: "formated", value: Number(lote.tipoCategoriaLote) }) as string
 
-  if (getFazenda.isLoading) {
+  if (getFazenda.isLoading || getImpostoLoading) {
     return <Loading />
   }
 
@@ -255,7 +265,7 @@ export function Arrematar() {
               name='imposto'
               placeholder='0,00'
               label='Imposto'
-              value={getImposto?.data?.valor.toLocaleString('pt-BR')}
+              value={getImposto?.valor ? getImposto?.valor.toLocaleString('pt-BR') : '0,00'}
               editable={false}
             />
 
@@ -318,23 +328,23 @@ export function Arrematar() {
             <S.title>RESUMO DE VALORES</S.title>
             <HStack alignItems={'center'} justifyContent={'space-between'} >
               <S.text>Preço por Animal</S.text>
-              <S.text>{convertNumbeToCurrency(lote.valorPorAnimal)}</S.text>
+              <S.text>{convertNumbeToCurrency(calc.vlAnimal)}</S.text>
             </HStack>
 
             <HStack alignItems={'center'} justifyContent={'space-between'} >
               <S.text>Quantidade por Cabeças</S.text>
-              <S.text>{lote.quantidadeAnimal}</S.text>
+              <S.text>{calc.quantidadeAnimal}</S.text>
             </HStack>
 
             <HStack alignItems={'center'} justifyContent={'space-between'} >
               <S.text>Preço do Lote</S.text>
-              <S.text>{convertNumbeToCurrency(vlLote)}</S.text>
+              <S.text>{convertNumbeToCurrency(calc.vlLote)}</S.text>
             </HStack>
 
             <S.line mg={4} />
             <HStack alignItems={'center'} justifyContent={'space-between'} >
               <S.text>Comissão da Compra</S.text>
-              <S.text style={{ color: color.alert }} >{convertNumbeToCurrency(comissao)}</S.text>
+              <S.text style={{ color: color.alert }} >{convertNumbeToCurrency(calc.comissao)}</S.text>
             </HStack>
 
             {selectedTypeTransportadora === '1' && (
@@ -348,7 +358,7 @@ export function Arrematar() {
 
             <HStack alignItems={'center'} justifyContent={'space-between'} >
               <S.text>Imposto</S.text>
-              <S.text style={{ color: color.alert }} >{convertNumbeToCurrency(imposto)}</S.text>
+              <S.text style={{ color: color.alert }} >{convertNumbeToCurrency(calc.imposto)}</S.text>
             </HStack>
             <S.line />
           </Box>
@@ -358,17 +368,17 @@ export function Arrematar() {
         <S.content>
           <HStack alignItems={'center'} justifyContent={'space-between'} >
             <S.title style={{ fontFamily: 'bold', fontSize: _subtitle }}>Valor Total</S.title>
-            <S.title style={{ fontFamily: 'bold', fontSize: _subtitle }}>{convertNumbeToCurrency(total)}</S.title>
+            <S.title style={{ fontFamily: 'bold', fontSize: _subtitle }}>{convertNumbeToCurrency(calc.total)}</S.title>
           </HStack>
 
           <Box>
             <HStack alignItems={'center'} justifyContent={'space-between'} >
               <S.text>Valor Final por Animal</S.text>
-              <S.text>{convertNumbeToCurrency(vlFinalPorAnimal)}</S.text>
+              <S.text>{convertNumbeToCurrency(calc.vlFinalPorAnimal)}</S.text>
             </HStack>
             <HStack alignItems={'center'} justifyContent={'space-between'} >
               <S.text>Valor Final por kg</S.text>
-              <S.text>{convertNumbeToCurrency(Number(valorQuilo.replace(/\D/g, '')) / 100)}</S.text>
+              <S.text>{convertNumbeToCurrency(_currencyToNumber(valorQuilo))}</S.text>
             </HStack>
           </Box>
 

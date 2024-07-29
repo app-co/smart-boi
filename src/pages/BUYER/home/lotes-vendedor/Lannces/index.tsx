@@ -25,18 +25,27 @@ export function Lannces() {
 
   const findArrematou = data?.find(h => h.arrematar === true) ?? false
 
-  async function validate() {
-    await mutateAsync
+  async function handleAccept() {
+    try {
+      await mutateAsync({
+        loteId: loteId,
+        statusLote: 1,
+        usuarioVendedorId: user!.usuarioId
+      })
+    } catch (error) {
+
+    }
   }
+
+
 
   async function submit() {
     Alert.alert('Alerta', 'Você tem certeza que deseja recusar esse lote', [
       {
         text: 'Cancelar',
-        onPress: async () => await mutateAsync({ loteId: loteId, statusLote: 6, usuarioVendedorId: user!.usuarioId }),
         style: 'cancel',
       },
-      { text: 'OK', onPress: async () => await mutateAsync({ loteId: loteId, statusLote: 7, usuarioVendedorId: user!.usuarioId }) }
+      { text: 'OK', onPress: async () => await mutateAsync({ loteId: loteId, statusLote: 3, usuarioVendedorId: user!.usuarioId }) }
     ]);
   }
 
@@ -90,7 +99,7 @@ export function Lannces() {
             </Box>
 
             <Box flex={1} >
-              <S.button color='#006C2B' >
+              <S.button onPress={handleAccept} color='#006C2B' >
                 <Feather color='#fff' name='check' size={25} />
                 <S.title style={{ color: '#fff' }} >ACEITAR</S.title>
               </S.button>

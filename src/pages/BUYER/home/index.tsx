@@ -8,6 +8,7 @@ import { UseFatch } from '@/hooks/fetchs'
 import { ILotes, IParceiros } from '@/hooks/fetchs/interfaces'
 import { useLotes, useParceiros } from '@/hooks/mutations'
 import { hightPercent } from '@/styles/sizes'
+import { getTokenUrl } from '@/utils/getTokenUrl'
 import { useNavigation } from '@react-navigation/native'
 import * as Linking from 'expo-linking'
 import { Box } from 'native-base'
@@ -27,10 +28,7 @@ export function Home() {
   const [lotesFechados, setLotesFechados] = React.useState<ILotes[]>([])
   const url = user!.urlVideoHome
 
-  // Usar regex para extrair o ID
-  const regex = /(?<=\.be\/)[^?]+/;
-  const match = url.match(regex);
-  const videoId = match ? match[0] : null;
+  const videoId = getTokenUrl(url)
 
   const parc = useParceiros()
   const Lotes = useLotes()

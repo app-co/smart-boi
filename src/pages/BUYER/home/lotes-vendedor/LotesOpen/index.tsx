@@ -41,7 +41,7 @@ export default function LotesOpen() {
 
       return dt
     })
-  }, [])
+  }, [lote])
 
 
   if (isLoading) {
@@ -68,7 +68,7 @@ export default function LotesOpen() {
       <FlatList
         contentContainerStyle={{ gap: 15 }}
         data={lotes}
-        renderItem={({ item }) => <Lotes typeUser='comprador' usuario='vendedor' item={item} />}
+        renderItem={({ item }) => <Lotes typeUser='vendedor' usuario='vendedor' item={item} />}
         keyExtractor={h => h.id}
         refreshControl={
           <RefreshControl
