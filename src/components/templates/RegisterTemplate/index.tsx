@@ -8,10 +8,11 @@ import api from '@/services/api'
 import { color } from '@/styles/color'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Device from 'expo-constants'
-import { Checkbox, useToast } from 'native-base'
+import * as Link from 'expo-linking'
+import { Checkbox, HStack, useToast } from 'native-base'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { ScrollView } from 'react-native'
+import { ScrollView, TouchableOpacity } from 'react-native'
 import * as S from './styles'
 
 interface I {
@@ -114,8 +115,20 @@ export function RegisterTemplate({ route }: I) {
           <S.title>TIPO DE USUÁRIO</S.title>
 
           <Selection itemSelected={h => setTypeUser(h)} itens={tipoUser} />
+          <HStack alignItems={'center'} space={2} >
+            <Checkbox
+              value='termos'
+              onChange={() => setTermos(!termos)}
+              _checked={{ bg: color.focus.regular, borderColor: '#ffffff3' }} _text={{ fontSize: 12 }} >
 
-          <Checkbox value='termos' onChange={() => setTermos(!termos)} _checked={{ bg: color.focus.regular, borderColor: '#ffffff3' }} _text={{ fontSize: 12 }} >Li e aceito os Termos de Uso e Privacidade</Checkbox>
+            </Checkbox>
+            <TouchableOpacity onPress={() => Link.openURL('https://www.smartboi.com.br')} >
+              <S.title>Li e aceito os Termos de Uso e Privacidade</S.title>
+
+            </TouchableOpacity>
+
+          </HStack>
+
 
           <Button title='FINALIZAR CADASTRO' load={load} onPress={control.handleSubmit(submit)} />
         </S.form>

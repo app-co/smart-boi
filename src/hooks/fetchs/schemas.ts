@@ -40,86 +40,86 @@ export const schemaLotes = z.object({
   statusLote: z.number(),
   pageSize: z.number().optional(),
   pageNumber: z.number().optional(),
-  usuarioId: z.string().optional(),
+  usuarioId: z.string({ message: '* campo obrigatório' }).optional(),
 })
 
 export const schemaLotesByID = z.object({
-  loteId: z.string()
+  loteId: z.string({ message: '* campo obrigatório' })
 })
 
 const file = z.object({
-  fileName: z.string().optional(),
-  uri: z.string(),
-  type: z.string(),
+  fileName: z.string({ message: '* campo obrigatório' }).optional(),
+  uri: z.string({ message: '* campo obrigatório' }),
+  type: z.string({ message: '* campo obrigatório' }),
 })
 
 export const schemaRegisterLote = z.object({
-  Imagens: z.array(z.object({ imagem: z.string() })),
-  PesoMedio: z.string().optional(),
-  ValorPorAnimal: z.string().optional(),
-  Quantidade: z.string(),
-  TipoOferta: z.string(),
-  TipoEspecie: z.string(),
-  Sexo: z.string(),
-  Raca: z.string(),
-  UsuarioAppId: z.string(),
-  EventoId: z.string(),
-  TipoCategoriaLote: z.string(),
-  EnderecoFazendaId: z.string(),
-  ValorPorQuilo: z.string(),
-  Video: z.string().optional().nullable(),
-  DescricaoLote: z.string(),
-  TempoDeVida: z.string(),
-  TempoDeVenda: z.string(),
+  Imagens: z.array(z.object({ imagem: z.string({ message: '* campo obrigatório' }) })),
+  PesoMedio: z.string({ message: '* campo obrigatório' }).optional(),
+  ValorPorAnimal: z.string({ message: '* campo obrigatório' }).optional(),
+  Quantidade: z.string({ message: '* campo obrigatório' }),
+  TipoOferta: z.string({ message: '* campo obrigatório' }),
+  TipoEspecie: z.string({ message: '* campo obrigatório' }),
+  Sexo: z.string({ message: '* campo obrigatório' }),
+  Raca: z.string({ message: '* campo obrigatório' }),
+  UsuarioAppId: z.string({ message: '* campo obrigatório' }),
+  EventoId: z.string({ message: '* campo obrigatório' }),
+  TipoCategoriaLote: z.string({ message: '* campo obrigatório' }),
+  EnderecoFazendaId: z.string({ message: '* campo obrigatório' }),
+  ValorPorQuilo: z.string({ message: '* campo obrigatório' }),
+  Video: z.string({ message: '* campo obrigatório' }).optional().nullable(),
+  DescricaoLote: z.string({ message: '* campo obrigatório' }),
+  TempoDeVida: z.string({ message: '* campo obrigatório' }),
+  TempoDeVenda: z.string({ message: '* campo obrigatório' }),
 })
 // export const schemaRegisterLote = z.object({
-//   Imagens: z.array(z.object({ imagem: z.string() })),
+//   Imagens: z.array(z.object({ imagem: z.string({message:'* campo obrigatório'}) })),
 //   PesoMedio: z.number(),
 //   Quantidade: z.number(),
 //   TipoOferta: z.number(),
 //   TipoEspecie: z.number(),
 //   Sexo: z.number(),
 //   ValorPorAnimal: z.number(),
-//   Raca: z.string(),
-//   UsuarioAppId: z.string(),
-//   EventoId: z.string(),
+//   Raca: z.string({message:'* campo obrigatório'}),
+//   UsuarioAppId: z.string({message:'* campo obrigatório'}),
+//   EventoId: z.string({message:'* campo obrigatório'}),
 //   TipoCategoriaLote: z.number(),
-//   EnderecoFazendaId: z.array(z.string()),
+//   EnderecoFazendaId: z.array(z.string({message:'* campo obrigatório'})),
 //   ValorPorQuilo: z.number(),
-//   Video: z.string(),
-//   DescricaoLote: z.string(),
+//   Video: z.string({message:'* campo obrigatório'}),
+//   DescricaoLote: z.string({message:'* campo obrigatório'}),
 //   TempoDeVida: z.number(),
 //   TempoDeVenda: z.number(),
 // })
 
 export const schemaBuyer = z.object({
-  // foto: z.string(),
-  // telefone: z.string(),
-  listEnderecos: z.array(z.string()),
-  usuarioAppId: z.string(),
-  // deviceId: z.string(),
-  // senha: z.string().optional(),
-  // cpf: z.string(),
-  // email: z.string(),
-  // nomeCompleto: z.string(),
+  // foto: z.string({message:'* campo obrigatório'}),
+  // telefone: z.string({message:'* campo obrigatório'}),
+  listEnderecos: z.array(z.string({ message: '* campo obrigatório' })),
+  usuarioAppId: z.string({ message: '* campo obrigatório' }),
+  // deviceId: z.string({message:'* campo obrigatório'}),
+  // senha: z.string({message:'* campo obrigatório'}).optional(),
+  // cpf: z.string({message:'* campo obrigatório'}),
+  // email: z.string({message:'* campo obrigatório'}),
+  // nomeCompleto: z.string({message:'* campo obrigatório'}),
 })
 
 export const schemaRegisterSaler = z.object({
-  // foto: z.string(),
-  // telefone: z.string(),
-  listEnderecos: z.array(z.string()),
-  usuarioAppId: z.string(),
-  // deviceId: z.string(),
-  // senha: z.string().optional(),
-  // cpf: z.string(),
-  // email: z.string(),
-  // nomeCompleto: z.string(),
+  // foto: z.string({message:'* campo obrigatório'}),
+  // telefone: z.string({message:'* campo obrigatório'}),
+  listEnderecos: z.array(z.string({ message: '* campo obrigatório' })),
+  usuarioAppId: z.string({ message: '* campo obrigatório' }),
+  // deviceId: z.string({message:'* campo obrigatório'}),
+  // senha: z.string({message:'* campo obrigatório'}).optional(),
+  // cpf: z.string({message:'* campo obrigatório'}),
+  // email: z.string({message:'* campo obrigatório'}),
+  // nomeCompleto: z.string({message:'* campo obrigatório'}),
 })
 
 
 
 export const schemaRegisterLance = z.object({
-  loteId: z.string(),
+  loteId: z.string({ message: '* campo obrigatório' }),
   valorImposto: z.number(),
   valorFrete: z.number(),
   comissaoPaga: z.number(),
@@ -132,37 +132,37 @@ export const schemaRegisterLance = z.object({
   arrematar: z.boolean(),
   tipoImposto: z.number(),
   tipoEntrega: z.number(),
-  enderecoId: z.string().optional(),
-  usuarioCompradorId: z.string(),
-  usuarioRepresentanteId: z.string(),
+  enderecoId: z.string({ message: '* campo obrigatório' }).optional(),
+  usuarioCompradorId: z.string({ message: '* campo obrigatório' }),
+  usuarioRepresentanteId: z.string({ message: '* campo obrigatório' }),
 })
 
 export const schemaGetLanceEnviado = z.object({
-  UsuarioId: z.string(),
+  UsuarioId: z.string({ message: '* campo obrigatório' }),
   DataLance: z.date(),
-  cidade: z.string(),
-  Uf: z.string(),
+  cidade: z.string({ message: '* campo obrigatório' }),
+  Uf: z.string({ message: '* campo obrigatório' }),
   StatusLote: z.number(),
   PageSize: z.number(),
   PageNumber: z.number(),
 })
 
 export const schemaGetCotacaoFiltered = z.object({
-  Estado: z.string(),
-  TipoGado: z.string(),
+  Estado: z.string({ message: '* campo obrigatório' }),
+  TipoGado: z.string({ message: '* campo obrigatório' }),
 }).merge(schemaPargination)
 
 export const schemavalidateLance = z.object({
-  loteId: z.string(),
-  usuarioVendedorId: z.string(),
+  loteId: z.string({ message: '* campo obrigatório' }),
+  usuarioVendedorId: z.string({ message: '* campo obrigatório' }),
   statusLote: z.number(),
 })
 
 export const schemaUpdatUser = z.object({
-  usuarioAppId: z.string(),
-  email: z.string(),
-  senah: z.string().optional(),
-  nomeCompleto: z.string(),
-  foto: z.string().optional(),
+  usuarioAppId: z.string({ message: '* campo obrigatório' }),
+  email: z.string({ message: '* campo obrigatório' }),
+  senah: z.string({ message: '* campo obrigatório' }).optional(),
+  nomeCompleto: z.string({ message: '* campo obrigatório' }),
+  foto: z.string({ message: '* campo obrigatório' }).optional(),
 })
 

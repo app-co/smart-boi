@@ -98,7 +98,8 @@ export function CasdastroPropriedadeRural() {
 
     <S.container>
       <ScrollView
-        showsVerticalScrollIndicator
+        showsVerticalScrollIndicator={false}
+
       >
 
         <Box py='6' style={{ gap: 10 }} >
@@ -124,11 +125,13 @@ export function CasdastroPropriedadeRural() {
             </Box>
 
           </HStack>
-          <FormInput keyboardType="numeric" name='destanciaMunicipio' label="Distância do municipi até Fazenda (km)" control={control.control} error={control.formState.errors.destanciaMunicipio} />
+          <FormInput keyboardType="numeric" name='destanciaMunicipio' label="Distância do municipio até Fazenda (km)" control={control.control} error={control.formState.errors.destanciaMunicipio} />
           <FormInput name='linkLocalizacao' label="Link da Localizção da Fazenda" control={control.control} error={control.formState.errors.linkLocalizacao} />
           <FormInput name='roteiroCaminho' label="Descrição do Roteiro" control={control.control} error={control.formState.errors.roteiroCaminho} />
 
           <Button load={isLoading} onPress={control.handleSubmit(submit)} title="CADASTRAR ENDEREÇO" />
+
+
         </S.form>
       </ScrollView>
     </S.container>

@@ -9,7 +9,7 @@ import { TRegisterLote } from '@/hooks/fetchs/schemas'
 import { useRegiterLote } from '@/hooks/mutations'
 import { AppError } from '@/services/AppError'
 import { color } from '@/styles/color'
-import { _text } from '@/styles/sizes'
+import { _subtitle, _text } from '@/styles/sizes'
 import { enumCategoriaLote, enumEspecie, enumTempoVenda, enumTempoVida } from '@/utils/enuns'
 import { Mask } from '@/utils/mask'
 import { _currencyToNumber, _toNumber, convertNumbeToCurrency } from '@/utils/unidades'
@@ -106,7 +106,6 @@ export function CadastroLote() {
   const [tempoVenda, setTempoVenda] = React.useState<string>('')
   const [categoria, setCategoria] = React.useState<string>('')
   const [sexo, setSexo] = React.useState<string>('')
-  const [fazenda, setFazenda] = React.useState('')
 
   const [Quantidade, setQuantidade] = React.useState<string>('')
   const [ValorPorAnimal, setValorAnimal] = React.useState<string>('')
@@ -126,6 +125,18 @@ export function CadastroLote() {
     queryFn: async () => fetch.getFazenda(user!.usuarioId)
   })
 
+  const fazendas = getFazenda?.data
+    ? getFazenda?.data?.map(h => {
+      return {
+        label: h.nomeFazenda,
+        value: h.idEndereco
+      }
+    })
+    : []
+
+  const [fazenda, setFazenda] = React.useState(fazendas.length === 1 ? fazendas[0].value : '')
+
+
   const eventos = data?.result
     ? data.result.map(h => {
       return {
@@ -135,14 +146,7 @@ export function CadastroLote() {
     })
     : []
 
-  const fazendas = getFazenda?.data
-    ? getFazenda?.data?.map(h => {
-      return {
-        label: h.nomeFazenda,
-        value: h.idEndereco
-      }
-    })
-    : []
+
 
   const getComissao = useQuery({
     queryKey: 'comissao',
@@ -405,9 +409,20 @@ export function CadastroLote() {
           <S.line />
 
           <S.gap>
-            <S.title>SELECIONE O ENDEREÇO DO LOTE</S.title>
 
-            <Selection itens={fazendas} itemSelected={h => setFazenda(h)} />
+            {fazendas.length === 1 ? (
+              <Box>
+                <S.title style={{ fontFamily: 'trin', fontSize: _subtitle }} >Endereço do lote</S.title>
+                <S.title>{fazendas[0].label}</S.title>
+              </Box>
+            ) : (
+              <S.gap>
+
+                <S.title>SELECIONE O ENDEREÇO DO LOTE</S.title>
+
+                <Selection itens={fazendas} itemSelected={h => setFazenda(h)} />
+              </S.gap>
+            )}
 
             {/* <S.buttonSheet style={{ borderColor: '#e9e9e9' }} >
                 <HStack alignItems={'center'} space={4} >
@@ -418,7 +433,7 @@ export function CadastroLote() {
                 </HStack>
 
               </S.buttonSheet> */}
-            <Button onPress={() => navigation.navigate('cadastroPropriedade')} title='ADICIONAR ENDEREÇO' styleType='border' icon={<Feather name='plus' size={25} />} />
+            <Button onPress={() => navigation.navigate('cadastroPropriedade')} title='CADASTRAR ENDEREÇO' styleType='border' icon={<Feather name='plus' size={25} />} />
           </S.gap>
 
           <S.line />

@@ -36,7 +36,6 @@ export default CreateValidationSchemas;
 
 export const schemaRegisterBuyer = z.object({
   email: z.string().email(),
-  senha: z.string(),
   nomeCompleto: z.string(),
   telefone: z.string(),
   cpf: z.string(),

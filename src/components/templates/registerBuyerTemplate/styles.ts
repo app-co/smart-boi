@@ -10,6 +10,7 @@ export const container = styled.View`
 
 export const title = styled.Text`
   color: ${color.text_color.global};
+  font-family: 'regular';
 `
 
 export const buttonSheet = styled.TouchableOpacity`

@@ -29,7 +29,7 @@ export function Acess() {
 
       {accessVendedor && !accessComprador && (
         <Box>
-          <S.title style={{ marginTop: 10 }} >Informações de Vendedor</S.title>
+          <S.title style={{ marginTop: 10 }} >Informações de Comprador</S.title>
 
           <HStack mt={2} space={2} >
             <S.bigBottom onPress={() => navigate('registerBuyer')} cor={color.focus.regular} >
@@ -56,7 +56,7 @@ export function Acess() {
 
       {accessComprador && !accessVendedor && (
         <Box >
-          <S.title style={{ marginTop: 10 }} >Informações de Comprador</S.title>
+          <S.title style={{ marginTop: 10 }} >Informações de Vendedor</S.title>
 
           <HStack mt={2} space={2} >
             <S.bigBottom onPress={() => navigate('registerSaler')} cor={color.alert} >

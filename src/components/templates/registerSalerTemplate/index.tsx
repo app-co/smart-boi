@@ -7,12 +7,11 @@ import { TSaler, schemaRegisterSaler } from '@/hooks/fetchs/schemas'
 import { useRegissterSaler } from '@/hooks/mutations'
 import api from '@/services/api'
 import { color } from '@/styles/color'
-import { Feather, Ionicons } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import * as Device from 'expo-constants'
-import * as ImagePicker from 'expo-image-picker'
-import { Box, Checkbox, HStack, Image, useToast } from 'native-base'
+import { Box, Checkbox, HStack, useToast } from 'native-base'
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ScrollView } from 'react-native'
@@ -25,6 +24,7 @@ export function RegisterSalerTemplate() {
   const { user, updateUser } = useAuth()
   const { mutateAsync, isLoading } = useRegissterSaler()
   const [fazenda, setFazenda] = React.useState<{ label: string, value: string }[]>([])
+  const [selectedFazenda, setSelectedFazenda] = React.useState('')
   const toast = useToast()
 
   const control = useForm<TSaler>({
@@ -60,18 +60,6 @@ export function RegisterSalerTemplate() {
 
   const [image, setImage] = useState(null);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
 
   const submit = async (input: TSaler) => {
     const deviceId = Device.default.sessionId;
@@ -105,6 +93,34 @@ export function RegisterSalerTemplate() {
     }
   };
 
+  function addFazenda() {
+    if (!selectedFazenda) {
+      return toast.show({
+        title: 'Selecione um propriedade',
+        placement: 'top',
+        bgColor: 'red.600',
+      })
+    }
+    const findSazendaFronSelected = fazenda.find(h => h.value === selectedFazenda)
+
+    if (findSazendaFronSelected) {
+      return toast.show({
+        title: 'Propriedade já selecionada',
+        placement: 'top',
+        bg: 'red.600'
+      })
+    }
+
+    const findFazenda = fazendas.find(f => f.value === selectedFazenda)
+
+
+
+    setFazenda([...fazenda, findFazenda ?? {} as { value: string, label: string }])
+
+    setSelectedFazenda('')
+  }
+
+
   function onSelectFazenda(id: string) {
     const findFazenda = fazendas.find(f => f.value === id)
 
@@ -119,14 +135,6 @@ export function RegisterSalerTemplate() {
         contentContainerStyle={{ paddingBottom: 50 }}
         showsVerticalScrollIndicator={false}
       >
-        <S.boxAvatr onPress={pickImage} >
-          {image ? (
-
-            <Image resizeMode='cover' w={'full'} h={'full'} alt='avatar' source={{ uri: image }} />
-          ) : (
-            <Ionicons size={35} name='camera' />
-          )}
-        </S.boxAvatr>
 
         <S.form>
           <S.title>DADOS PESSOAIS</S.title>
@@ -140,24 +148,40 @@ export function RegisterSalerTemplate() {
           {/* <FormInput placeholder='Insira uma senha que lembre' label='Senha' name='senha' control={control.control} error={control.formState.errors.senha} /> */}
           <S.line />
 
-          <S.title>DADOS DE EENDEREÇO</S.title>
+          <S.title>DADOS D EENDEREÇO</S.title>
+          <Button onPress={() => nav.navigate('cadastroPropriedade')} title='ADICIONAR FAZENDA' styleType='border' icon={<Feather name='plus' size={23} />} />
 
-          <Button onPress={() => navigation.navigate('cadastroPropriedade')} title='ADICIONAR FAZENDA' styleType='border' icon={<Feather name='plus' size={23} color={color.focus.regular} />} />
+          <Box borderWidth={1} py={8} px={4} rounded={8} borderColor="gray.400" style={{ gap: 20 }} >
+            <S.title>Adicione suas propriedades rurais.</S.title>
+            <Selection label='Propriedades' placeholder={fazenda.length > 0 ? 'Selecione outra propriedade' : 'Adicione sua propriedade rural'} itemSelected={h => setSelectedFazenda(h)} itens={fazendas} />
+            <S.title>Fazendas</S.title>
+            <TouchableOpacity onPress={addFazenda} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }} >
+              <Feather name='plus' size={24} color={color.focus.regular} />
+              <S.title style={{ color: color.focus.regular, fontWeight: '700' }} >Adicione a fazenda selecionada</S.title>
+            </TouchableOpacity>
 
-          <Selection placeholder='Selecione uma fazenda' itemSelected={h => onSelectFazenda(h)} itens={fazendas} />
 
 
-          {fazendas.map(h => (
-            <S.buttonSheet style={{ borderColor: '#e9e9e9' }} >
-              <HStack alignItems={'center'} space={4} >
-                <Box bg={'gray.100'} rounded={8} p={2} >
-                  <Feather name='map-pin' size={20} color={'#ccc'} />
-                </Box>
-                <S.title>{h.label}</S.title>
-              </HStack>
+            <FlatList
+              data={fazenda}
+              keyExtractor={(h, i) => String(i)}
+              contentContainerStyle={{
+                gap: 5,
+              }}
+              renderItem={({ item: h, index }) => (
+                <HStack bg="gray.200" p={2} rounded={4} alignItems="center" justifyContent="space-between" >
+                  <Box  >
+                    <S.title style={{ fontWeight: '600' }} >{h.label}</S.title>
+                  </Box>
+                  <TouchableOpacity onPress={() => removeFazenda(index)} style={{ padding: 5, borderRadius: 30, backgroundColor: 'rgba(255, 164, 164, 0.332)' }} >
+                    <Feather name='trash-2' color="red" size={20} />
+                  </TouchableOpacity>
+                </HStack>
+              )}
+            />
 
-            </S.buttonSheet>
-          ))}
+          </Box>
+
           <Checkbox
             value='termos'
             onChange={() => setTermos(!termos)}

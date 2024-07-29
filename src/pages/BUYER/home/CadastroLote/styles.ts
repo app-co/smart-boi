@@ -14,7 +14,7 @@ export const title = styled.Text`
 `;
 
 export const gap = styled.View`
-  gap: 10px;
+  gap: 15px;
 `
 
 export const line = styled.View`

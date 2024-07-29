@@ -21,7 +21,7 @@ export const body = styled.View`
   background-color: #fff;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
-  margin-top: -${hightPercent('1.8')}%;
+  margin-top: -${hightPercent('.7')}%;
   padding: 15px;
 `
 

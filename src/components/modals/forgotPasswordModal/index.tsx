@@ -15,6 +15,8 @@ import Toast from 'react-native-toast-message';
 
 import { ForgotPasswordModalProps } from '@/interfaces';
 import { CreateValidationSchemas } from '@/schemas';
+import api from '@/services/api';
+import { color } from '@/styles/color';
 
 export const ForgotPasswordModal = ({
   open,
@@ -29,6 +31,7 @@ export const ForgotPasswordModal = ({
   const handleSubmit = async (values: { email: string }) => {
     try {
       // await requestPasswordChange(values.email);
+      await api.post(`/Usuario/solicitar-reset-senha/${values.email}`)
 
       Toast.show({
         type: 'success',
@@ -69,11 +72,11 @@ export const ForgotPasswordModal = ({
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={styles.modalTitle}>
-                  components.modals.forgotPasswordModal.modalTitle
+                  Recuperação de senha
                 </Text>
 
                 <Text style={styles.modalSmallText}>
-                  components.modals.forgotPasswordModal.modalSmallText
+                  Digite seu email cadastrado para recuperar sua senha
                 </Text>
 
                 <Formik
@@ -84,14 +87,13 @@ export const ForgotPasswordModal = ({
                   {({ handleSubmit }) => (
                     <>
                       <Text style={styles.title}>
-                        components.modals.forgotPasswordModal.email
+                        Email
                       </Text>
                       <Field name="email">
                         {({ field }: FieldProps<string>) => (
                           <TextInput
                             {...field}
-                            placeholder={
-                              'components.modals.forgotPasswordModal.emailPlaceholder'}
+                            placeholder='Digite seu email'
                             style={styles.input}
                             onChangeText={field.onChange('email')}
                             onBlur={field.onBlur('email')}
@@ -100,7 +102,7 @@ export const ForgotPasswordModal = ({
                       </Field>
                       <ErrorMessage name="email">
                         {errorMsg => (
-                          <Text style={styles.errorText}>{errorMsg}</Text>
+                          <Text style={styles.errorText}>E-mail não encontrado ou inválido</Text>
                         )}
                       </ErrorMessage>
 
@@ -108,7 +110,7 @@ export const ForgotPasswordModal = ({
                         style={[
                           styles.button,
                           {
-                            backgroundColor: corPrimaria,
+                            backgroundColor: color.focus.regular,
                           },
                         ]}
                         disabled={isLoading}
@@ -118,7 +120,7 @@ export const ForgotPasswordModal = ({
                           <ActivityIndicator color="#fff" />
                         ) : (
                           <Text style={styles.buttonText}>
-                            components.modals.forgotPasswordModal.button.send
+                            ENVIAR
                           </Text>
                         )}
                       </TouchableOpacity>

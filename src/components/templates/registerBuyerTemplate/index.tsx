@@ -6,15 +6,15 @@ import { UseFatch } from '@/hooks/fetchs'
 import { useRegissterBuyer } from '@/hooks/mutations'
 import { TRegisterBuyerUser } from '@/interfaces'
 import { schemaRegisterBuyer } from '@/schemas'
+import { AppError } from '@/services/AppError'
 import api from '@/services/api'
 import { color } from '@/styles/color'
-import { Feather, Ionicons } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import * as Device from 'expo-constants'
-import * as ImagePicker from 'expo-image-picker'
-import { Box, Checkbox, HStack, Image, useToast } from 'native-base'
-import React, { useCallback, useState } from 'react'
+import { Box, Checkbox, HStack, useToast } from 'native-base'
+import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { FlatList, ScrollView, TouchableOpacity } from 'react-native'
 import { useQuery } from 'react-query'
@@ -27,9 +27,6 @@ export function RegisterBuyerTemplate() {
   const nav = useNavigation()
   const toast = useToast()
   const { mutateAsync, isLoading } = useRegissterBuyer()
-  const [fazenda, setFazenda] = React.useState<{ label: string, value: string }[]>([])
-  const [selectedFazenda, setSelectedFazenda] = React.useState('')
-
   const control = useForm<TRegisterBuyerUser>({
     resolver: zodResolver(schemaRegisterBuyer.omit({ deviceId: true, tipoUsuario: true })),
     defaultValues: {
@@ -39,6 +36,8 @@ export function RegisterBuyerTemplate() {
       cpf: user?.cpf,
     }
   })
+
+  console.log(control.formState.errors)
 
 
   const getFazenda = useQuery({
@@ -56,6 +55,7 @@ export function RegisterBuyerTemplate() {
       }
     })
     : []
+  const [fazenda, setFazenda] = React.useState<{ label: string, value: string }[]>(fazendas.length === 1 ? fazendas : [])
 
   useFocusEffect(useCallback(() => {
     getFazenda.refetch()
@@ -63,20 +63,6 @@ export function RegisterBuyerTemplate() {
 
   const [termos, setTermos] = React.useState<boolean>(false)
 
-  const [image, setImage] = useState(null);
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri!);
-    }
-  };
 
 
   const submit = React.useCallback(async (input: TRegisterBuyerUser) => {
@@ -109,31 +95,35 @@ export function RegisterBuyerTemplate() {
 
       nav.navigate('home')
     } catch (error) {
+      console.log({ error })
+      if (error instanceof AppError) {
+        toast.show({
+          title: error.message,
+          duration: 2000,
+          bg: 'red.700',
+          placement: 'top',
+        })
+      }
     }
   }, [user!.usuarioId, fazenda])
 
 
-  function onSelectFazenda(id: string) {
-    const findFazenda = fazendas.find(f => f.value === id)
+  function addFazenda(value: string) {
 
-    setFazenda(h => [...h, findFazenda ?? {} as { value: string, label: string }])
-  }
+    const findSazendaFronSelected = fazenda.find(h => h.value === value)
 
-  function addFazenda() {
-    if (!selectedFazenda) {
+    if (findSazendaFronSelected) {
       return toast.show({
-        title: 'Selecione um propriedade',
+        title: 'Propriedade já selecionada',
         placement: 'top',
-        bgColor: 'red.600',
+        bg: 'red.600'
       })
     }
 
-    const findFazenda = fazendas.find(f => f.value === selectedFazenda)
-
+    const findFazenda = fazendas.find(f => f.value === value)
 
     setFazenda([...fazenda, findFazenda ?? {} as { value: string, label: string }])
 
-    setSelectedFazenda('')
   }
 
   function removeFazenda(i: number) {
@@ -155,16 +145,6 @@ export function RegisterBuyerTemplate() {
         contentContainerStyle={{ paddingBottom: 50 }}
         showsVerticalScrollIndicator={false}
       >
-        <S.boxAvatr onPress={pickImage} >
-          {image ? (
-
-            <Image resizeMode='contain' w={'200px'} h={'150px'} alt='avatar' source={{ uri: image }} />
-          ) : (
-            <Ionicons size={35} name='camera' />
-          )}
-        </S.boxAvatr>
-
-
         <S.form>
           <S.title>DADOS PESSOAIS</S.title>
           <FormInput placeholder='Seu nome aparecerá para o comprador do lote' label='Nome Completo' name='nomeCompleto' control={control.control} error={control.formState.errors.nomeCompleto} />
@@ -174,7 +154,6 @@ export function RegisterBuyerTemplate() {
 
           <S.title>DADOS DE ACESSO</S.title>
           <FormInput placeholder='exemplo@exemplo.com' label='E-mail' name='email' control={control.control} error={control.formState.errors.email} />
-          <FormInput placeholder='Insira uma senha que lembre' label='Senha' name='senha' control={control.control} error={control.formState.errors.senha} />
           <S.line />
 
           <S.title>DADOS D EENDEREÇO</S.title>
@@ -182,14 +161,12 @@ export function RegisterBuyerTemplate() {
 
           <Box borderWidth={1} py={8} px={4} rounded={8} borderColor="gray.400" style={{ gap: 20 }} >
             <S.title>Adicione suas propriedades rurais.</S.title>
-            <Selection label='Propriedades' placeholder={fazenda.length > 0 ? 'Selecione outra propriedade' : 'Adicione sua propriedade rural'} itemSelected={h => setSelectedFazenda(h)} itens={fazendas} />
+            <Selection
+              label='Propriedades'
+              placeholder={fazenda.length > 0 ? 'Selecione outra propriedade' : 'Adicione sua propriedade rural'}
+              itemSelected={h => addFazenda(h)}
+              itens={fazendas} />
             <S.title>Fazendas</S.title>
-            <TouchableOpacity onPress={addFazenda} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }} >
-              <Feather name='plus' size={24} color={color.focus.regular} />
-              <S.title style={{ color: color.focus.regular, fontWeight: '700' }} >Adicione a fazenda selecionada</S.title>
-            </TouchableOpacity>
-
-
 
             <FlatList
               data={fazenda}
@@ -210,13 +187,18 @@ export function RegisterBuyerTemplate() {
             />
 
           </Box>
-          <Checkbox
-            value='termos'
-            onChange={() => setTermos(!termos)}
-            _checked={{ bg: color.focus.regular, borderColor: '#ffffff3' }}
-            _text={{ fontSize: 12 }} >
+
+
+          <HStack space={3} >
+            <Checkbox
+              value='termos'
+              onChange={() => setTermos(!termos)}
+              _checked={{ bg: color.focus.regular, borderColor: '#ffffff3' }}
+              _text={{ fontSize: 12 }} >
+            </Checkbox>
             <S.title>Li e aceito os Termos de Uso e Privacidade</S.title>
-          </Checkbox>
+
+          </HStack>
 
           <Button load={isLoading} onPress={control.handleSubmit(submit)} title='FINALIZAR CADASTRO' />
         </S.form>

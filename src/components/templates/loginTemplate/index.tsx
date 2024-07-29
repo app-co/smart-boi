@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import * as LocalAuth from 'expo-local-authentication';
-import { Box, Center, HStack, Image } from 'native-base';
+import { Box, Center, HStack, Image, useToast } from 'native-base';
 import React, { useState } from 'react';
 import {
   Modal,
@@ -53,6 +53,7 @@ export default function LoginTemplate() {
   const [showModalPermission, setShowModalPermission] = React.useState(false);
   const [valuesForm, setValueForm] = React.useState<LoginFormValues>();
   const [load, setLoad] = React.useState<boolean>(false)
+  const toast = useToast()
 
   async function verifyAvaliableAuthentication() {
     const compatible = await LocalAuth.supportedAuthenticationTypesAsync();
@@ -77,6 +78,12 @@ export default function LoginTemplate() {
         setLoad(false)
       } catch (error: any) {
         setLoad(false)
+        toast.show({
+          title: 'Erro ao fazer login',
+          description: 'E-mail ou senha incorretos',
+          placement: 'top',
+          bg: 'red.700'
+        })
         await AsyncStorage.removeItem('smartboi@local-auth');
         setShowModalPermission(false);
         setPermission(false);
@@ -239,6 +246,9 @@ export default function LoginTemplate() {
       <S.container>
         <FormInput keyboardType='email-address' autoCapitalize='none' control={control.control} error={control.formState.errors.email} name="email" label="E-mail" />
         <FormInput autoCapitalize='none' control={control.control} error={control.formState.errors.senha} secureTextEntry name="senha" label="Senha" />
+        <TouchableOpacity onPress={() => setIsModalVisible(true)} >
+          <S.title>Esqueci minha senha</S.title>
+        </TouchableOpacity>
         <Button title='ENTRAR' onPress={control.handleSubmit(login)} load={load} />
       </S.container>
 
