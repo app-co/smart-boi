@@ -4,6 +4,7 @@ import { MarteloGraySvg } from '@/assets/svg/home/detalhes/martelo-gray'
 import { MoneyFillSvg } from '@/assets/svg/home/detalhes/money-fill'
 import { Button } from '@/components/forms/Button'
 import { ILotesById } from '@/hooks/fetchs/interfaces'
+import { _text } from '@/styles/sizes'
 import { Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { Box, HStack, VStack } from 'native-base'
@@ -23,9 +24,9 @@ export default function OthersInfo({ item }: { item: ILotesById }) {
         <S.content>
           <HStack alignItems={'center'} space={4} >
             <CalendarInfoSgv />
-            <Box>
+            <Box flex={1} >
               <S.text>PERÍODO DO LOTE</S.text>
-              <S.title style={{ fontFamily: 'regular', letterSpacing: 1.2 }} >{otherInfo?.periodoLote}</S.title>
+              <S.title style={{ fontFamily: 'regular', letterSpacing: 1.2, fontSize: _text - 2.5 }} >{otherInfo?.periodoLote}</S.title>
             </Box>
           </HStack>
 

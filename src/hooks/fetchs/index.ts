@@ -207,7 +207,7 @@ export class UseFatch {
     return data.result as IImposto;
   }
 
-  async getComissao(params: { TipoComissao: number }) {
+  async getComissao(params: { comissao: number }) {
     const { data } = await api.get('/Lote/comissao-venda-compra', { params });
 
     return data.result as IComissao;

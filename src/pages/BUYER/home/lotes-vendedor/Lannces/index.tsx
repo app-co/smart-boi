@@ -6,7 +6,7 @@ import { color } from '@/styles/color'
 import { _text } from '@/styles/sizes'
 import { Feather } from '@expo/vector-icons'
 import { useRoute } from '@react-navigation/native'
-import { Box } from 'native-base'
+import { Box, useToast } from 'native-base'
 import React from 'react'
 import { Alert, FlatList } from 'react-native'
 import { useQuery } from 'react-query'
@@ -18,6 +18,7 @@ export function Lannces() {
   const { user } = useAuth()
   const { loteId } = useRoute().params as { loteId: string }
   const { mutateAsync } = useValidateLance()
+  const toast = useToast()
   const { data, isLoading, error } = useQuery({
     queryKey: 'lancesRecebidos',
     queryFn: async () => fetch.getLanceRecebido(user!.usuarioId)
@@ -32,8 +33,19 @@ export function Lannces() {
         statusLote: 1,
         usuarioVendedorId: user!.usuarioId
       })
+      toast.show({
+        description: 'Lote aceito',
+        color: 'green.700',
+        duration: 2000,
+        placement: 'top'
+      })
     } catch (error) {
-
+      toast.show({
+        description: 'Erro ao aceitar lote',
+        color: 'red.700',
+        duration: 2000,
+        placement: 'top'
+      })
     }
   }
 
@@ -45,7 +57,17 @@ export function Lannces() {
         text: 'Cancelar',
         style: 'cancel',
       },
-      { text: 'OK', onPress: async () => await mutateAsync({ loteId: loteId, statusLote: 3, usuarioVendedorId: user!.usuarioId }) }
+      {
+        text: 'OK', onPress: async () => {
+          await mutateAsync({ loteId: loteId, statusLote: 3, usuarioVendedorId: user!.usuarioId })
+          toast.show({
+            description: 'Lote recusado',
+            color: 'orange.700',
+            duration: 2000,
+            placement: 'top'
+          })
+        }
+      }
     ]);
   }
 

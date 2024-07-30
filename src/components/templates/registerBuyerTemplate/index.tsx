@@ -1,6 +1,5 @@
 import { Button } from '@/components/forms/Button'
 import { FormInput } from '@/components/forms/FormInput'
-import { Selection } from '@/components/forms/Selection'
 import { useAuth } from '@/contexts/auth'
 import { UseFatch } from '@/hooks/fetchs'
 import { useRegissterBuyer } from '@/hooks/mutations'
@@ -160,16 +159,10 @@ export function RegisterBuyerTemplate() {
           <Button onPress={() => nav.navigate('cadastroPropriedade')} title='ADICIONAR FAZENDA' styleType='border' icon={<Feather name='plus' size={23} />} />
 
           <Box borderWidth={1} py={8} px={4} rounded={8} borderColor="gray.400" style={{ gap: 20 }} >
-            <S.title>Adicione suas propriedades rurais.</S.title>
-            <Selection
-              label='Propriedades'
-              placeholder={fazenda.length > 0 ? 'Selecione outra propriedade' : 'Adicione sua propriedade rural'}
-              itemSelected={h => addFazenda(h)}
-              itens={fazendas} />
             <S.title>Fazendas</S.title>
 
             <FlatList
-              data={fazenda}
+              data={fazendas}
               keyExtractor={(h, i) => String(i)}
               contentContainerStyle={{
                 gap: 5,

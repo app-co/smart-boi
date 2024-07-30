@@ -96,6 +96,8 @@ export interface ILotesById {
   usuarioAppId: string;
   quantidadeAnimal: number;
   outrasInformacoes: OutrasInformacoes;
+  tipoOferta: number
+
 }
 
 interface OutrasInformacoes {

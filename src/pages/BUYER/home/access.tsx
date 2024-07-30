@@ -33,7 +33,7 @@ export function Acess() {
 
           <HStack mt={2} space={2} >
             <S.bigBottom onPress={() => navigate('registerBuyer')} cor={color.focus.regular} >
-              <S.title style={{ color: '#fff', width: 100, textAlign: 'center', fontSize: _text - 2 }} >Registrar como Comprador</S.title>
+              <S.title style={{ color: '#fff', fontSize: _text - 2 }} >Registrar como Comprador</S.title>
             </S.bigBottom>
           </HStack>
         </Box>

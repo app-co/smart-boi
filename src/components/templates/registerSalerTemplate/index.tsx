@@ -1,6 +1,5 @@
 import { Button } from '@/components/forms/Button'
 import { FormInput } from '@/components/forms/FormInput'
-import { Selection } from '@/components/forms/Selection'
 import { useAuth } from '@/contexts/auth'
 import { UseFatch } from '@/hooks/fetchs'
 import { TSaler, schemaRegisterSaler } from '@/hooks/fetchs/schemas'
@@ -14,7 +13,7 @@ import * as Device from 'expo-constants'
 import { Box, Checkbox, HStack, useToast } from 'native-base'
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ScrollView } from 'react-native'
+import { FlatList, ScrollView } from 'react-native'
 import { useQuery } from 'react-query'
 import * as S from './styles'
 
@@ -68,7 +67,7 @@ export function RegisterSalerTemplate() {
       // ...input,
       // deviceId,
       // foto: image ?? '',
-      listEnderecos: fazenda.map(h => h.value),
+      listEnderecos: fazendas.map(h => h.value),
       usuarioAppId: user!.usuarioId
     }
 
@@ -121,6 +120,20 @@ export function RegisterSalerTemplate() {
   }
 
 
+  function removeFazenda(i: number) {
+    const index = fazenda.findIndex((h, index) => i === index)
+
+    const arry = [...fazenda]
+
+    if (index !== -1) {
+      arry.splice(index, 1)
+    }
+
+    setFazenda(arry)
+  }
+
+
+
   function onSelectFazenda(id: string) {
     const findFazenda = fazendas.find(f => f.value === id)
 
@@ -149,21 +162,14 @@ export function RegisterSalerTemplate() {
           <S.line />
 
           <S.title>DADOS D EENDEREÇO</S.title>
-          <Button onPress={() => nav.navigate('cadastroPropriedade')} title='ADICIONAR FAZENDA' styleType='border' icon={<Feather name='plus' size={23} />} />
+          <Button onPress={() => navigation.navigate('cadastroPropriedade')} title='ADICIONAR FAZENDA' styleType='border' icon={<Feather name='plus' size={23} />} />
+
 
           <Box borderWidth={1} py={8} px={4} rounded={8} borderColor="gray.400" style={{ gap: 20 }} >
-            <S.title>Adicione suas propriedades rurais.</S.title>
-            <Selection label='Propriedades' placeholder={fazenda.length > 0 ? 'Selecione outra propriedade' : 'Adicione sua propriedade rural'} itemSelected={h => setSelectedFazenda(h)} itens={fazendas} />
             <S.title>Fazendas</S.title>
-            <TouchableOpacity onPress={addFazenda} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }} >
-              <Feather name='plus' size={24} color={color.focus.regular} />
-              <S.title style={{ color: color.focus.regular, fontWeight: '700' }} >Adicione a fazenda selecionada</S.title>
-            </TouchableOpacity>
-
-
 
             <FlatList
-              data={fazenda}
+              data={fazendas}
               keyExtractor={(h, i) => String(i)}
               contentContainerStyle={{
                 gap: 5,
@@ -173,9 +179,9 @@ export function RegisterSalerTemplate() {
                   <Box  >
                     <S.title style={{ fontWeight: '600' }} >{h.label}</S.title>
                   </Box>
-                  <TouchableOpacity onPress={() => removeFazenda(index)} style={{ padding: 5, borderRadius: 30, backgroundColor: 'rgba(255, 164, 164, 0.332)' }} >
+                  {/* <TouchableOpacity onPress={() => removeFazenda(index)} style={{ padding: 5, borderRadius: 30, backgroundColor: 'rgba(255, 164, 164, 0.332)' }} >
                     <Feather name='trash-2' color="red" size={20} />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </HStack>
               )}
             />

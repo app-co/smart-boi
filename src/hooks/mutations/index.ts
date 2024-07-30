@@ -78,7 +78,13 @@ export function useGetAllContacao() {
 
 }
 export function useValidateLance() {
-  return useMutation(fetch.validateLance)
+  const client = useQueryClient()
+
+  return useMutation(fetch.validateLance, {
+    onSuccess: () => {
+      client.invalidateQueries('lancesRecebidos');
+    },
+  })
 }
 
 export function useUpdateUsesr() {

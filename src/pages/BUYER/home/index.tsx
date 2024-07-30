@@ -71,7 +71,7 @@ export function Home() {
     return <Loading />
   }
 
-  const telHelp = process.env.EXPO_WHTASAPP
+  const telHelp = 'https://wa.me/5562992701000'
 
 
   return (
@@ -129,7 +129,7 @@ export function Home() {
               )}
             />
           </Box>
-          <Button icon={<WhtasAppSvg />} onPress={() => Linking.openURL(`https://wa.me/55${telHelp}`)} styleType='border' title='Alguma dúvida? Fale conosco' />
+          <Button icon={<WhtasAppSvg />} onPress={() => Linking.openURL(telHelp)} styleType='border' title='Alguma dúvida? Fale conosco' />
 
         </ScrollView>
       </S.body>

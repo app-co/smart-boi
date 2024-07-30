@@ -212,7 +212,6 @@ export function Arrematar() {
     }
   }
 
-
   const tipoLote = enumCategoriaLote({ type: "formated", value: Number(lote.tipoCategoriaLote) }) as string
 
   if (getFazenda.isLoading || getImpostoLoading) {
@@ -320,7 +319,7 @@ export function Arrematar() {
             error={errors.kg}
             control={control}
             keyboardType='numeric'
-            label='Preço do quilo (kg)'
+            label={lote?.tipoOferta === 0 ? 'Preço por Quilo (kg)' : 'Preço por Animal'}
             editable={tipoLance === 'arrematar' ? false : true}
           />
 

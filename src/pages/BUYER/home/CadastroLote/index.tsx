@@ -150,7 +150,7 @@ export function CadastroLote() {
 
   const getComissao = useQuery({
     queryKey: 'comissao',
-    queryFn: async () => fetch.getComissao({ TipoComissao: 1 })
+    queryFn: async () => fetch.getComissao({ comissao: 1 })
   })
 
 

@@ -28,7 +28,7 @@ export function Patrocinios({ parceiro = [] }: I) {
 
 
   React.useEffect(() => {
-    if (parceiro && parceiro.length > 0) {
+    if (parceiro && parceiro.length > 1) {
       ref.current?.scrollToIndex({
         animated: true,
         index,
